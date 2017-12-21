@@ -1,22 +1,55 @@
 # using the mnist data set generate arrays of images representing a hand written matrix
 from __future__ import print_function
 from PIL import Image
-im1 = Image.open("./mnist/train-images/3697.jpg")
-im2 = Image.open("./mnist/train-images/3698.jpg")
-im3 = Image.open("./mnist/train-images/3699.jpg")
-im4 = Image.open("./mnist/train-images/3400.jpg")
+import csv
 
-reg1 = (0, 0, 28, 28)
-reg2 = (28,28,56,56) 
-reg3 = (0, 28, 28, 56)
-reg4 = (28, 0, 56, 28)
+labels = open("./mnist/train-labels.csv", "rb")
+newLabels = open("./mnist/matrix-train-labels.csv", "wb")
+reader = csv.reader(labels)
+labelWriter = csv.writer(newLabels)
+
+def imagePosition(x):
+    return {
+        1: (0,0,28,28),
+        2: (28,0,56,28),
+        3: (0,28,28,56),
+        4: (28,28,56,56)
+}[x]
 
 newImage = Image.new("L", (56,56), "white")
-newImage.paste(im1, reg1)
-newImage.paste(im2, reg2)
-newImage.paste(im3, reg3)
-newImage.paste(im4, reg4)
-print(newImage.format, newImage.size, newImage.mode)
-newImage.save("new.jpeg")
+
+imageCounter = 1;
+generated = 1;
+newLabel = []
+
+for row in reader:
+    i = Image.open("./mnist/" + row[0])
+    newImage.paste(i, imagePosition(imageCounter))
+    newLabel.append(row[1])
+    if(imageCounter == 4): 
+        imageCounter = 1;
+        imageName = "matrix" + str(generated) + ".jpg"
+        newImage.save("./mnist/matrix-train-images/" + imageName)
+        labelWriter.writerow([imageName, newLabel[0], newLabel[1], newLabel[2], newLabel[3]])
+        print(newLabel)
+        newLabel = []
+        generated = generated + 1;
+    else: 
+        imageCounter = imageCounter + 1 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
