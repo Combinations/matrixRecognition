@@ -30,8 +30,8 @@ for row in reader:
         imageCounter = 1;
         imageName = "matrix" + str(generated) + ".jpg"
         newImage.save("./mnist/matrix-train-images/" + imageName)
-        labelWriter.writerow([imageName, newLabel[0], newLabel[1], newLabel[2], newLabel[3]])
         print(newLabel)
+        labelWriter.writerow([imageName, newLabel[0], newLabel[1], newLabel[2], newLabel[3]])
         newLabel = []
         generated = generated + 1;
     else: 
